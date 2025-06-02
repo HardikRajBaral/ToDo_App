@@ -3,7 +3,7 @@ import userModel from "./userModel";
 import bcrypt from "bcrypt";
 import { config } from "../config/config";
 import jwt from "jsonwebtoken";
-import { timeStamp } from "node:console";
+
 const createUser= async (req:Request, res:Response,next:NextFunction)=>{
     const {userName,email,password}= req.body;
     if(!userName|| !email || !password ){
@@ -37,6 +37,26 @@ const createUser= async (req:Request, res:Response,next:NextFunction)=>{
 };
 
 
+const loginUser= async (req:Request, res:Response,next:NextFunction)=>{
+try{
+        const {email,password}= req.body;
+    const user= await userModel.findOne({email:email});
+    if (!user){
+        return res.status(400).json({message:"User does not exist"});
+    }
+    const isMatch= await bcrypt.compare(password,user.password)
+    if(!isMatch){
+        return res.status(400).json({message:"Password is incorrect"});
+    }
+    const token =jwt.sign({sub:user._id},config.jwtSecret as string,{expiresIn:"7d"});
+    res.status(200).json( {accessToken:token});
+    if(!token){
+        return res.status(400).json({message:"Token is not created"});
+    }
 
+}catch (error){
+    next(error);
+}
+};
 
 export{ createUser};
