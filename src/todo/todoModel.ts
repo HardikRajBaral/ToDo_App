@@ -3,7 +3,7 @@ import { title } from "process";
 import userModel from "../user/userModel";
 const todoModel= new mongoose.Schema({
     userName:{
-        type:userModel,
+        type:mongoose.Schema.Types.ObjectId,
         required:true
     },
     title:{
