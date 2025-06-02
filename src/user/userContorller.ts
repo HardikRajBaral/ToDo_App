@@ -58,5 +58,5 @@ try{
     next(error);
 }
 };
-
+export{ loginUser};
 export{ createUser};
