@@ -1,8 +1,8 @@
 import express from 'express'
-import { createUserMiddleware, loginUserMiddleware } from "./routerMiddleware";
+import { createUserMiddleware, loginUserMiddleware } from "../middleware/routerMiddleware";
 
 
-const userRouter= express.Router();
+const userRouter = express.Router();
 
 
 

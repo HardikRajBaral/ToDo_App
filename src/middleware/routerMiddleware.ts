@@ -1,5 +1,5 @@
 import { NextFunction ,Request, Response} from "express";
-import { createUser, loginUser } from "./userContorller";
+import { createUser, loginUser } from "../user/userContorller";
 
 const createUserMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
