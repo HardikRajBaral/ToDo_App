@@ -20,3 +20,4 @@ const todoModel= new mongoose.Schema({
     },
     
 })
+export default mongoose.model("Todo",todoModel)

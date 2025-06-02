@@ -1,7 +1,7 @@
-import express from "express"
-import { createTodo } from "./todoController"
-
+import express, { NextFunction,Response,Request } from "express"
+import { createTodoMiddleware } from "../middleware/routerMiddleware"
 
 const todoRouter =express.Router()
 
-todoRouter.post('/',createTodo)
+
+todoRouter.post('/',createTodoMiddleware)
