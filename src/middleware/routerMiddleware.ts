@@ -1,7 +1,7 @@
 import { NextFunction ,Request, Response} from "express";
 import { createUser, loginUser } from "../user/userContorller";
 import { create } from "domain";
-import { createTodo } from "../todo/todoController";
+import { createTodo, updateTodo } from "../todo/todoController";
 import { AuthernticatedRequest } from "../middleware/Authenticate";
 
 const createUserMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -23,7 +23,7 @@ const loginUserMiddleware = async (req: Request, res: Response, next: NextFuncti
 
 const createTodoMiddleware=async (req:Request, res:Response, next:NextFunction)=>{
   try{
-    await createTodo(req as AuthernticatedRequest,res,next);
+    await createTodo(req,res,next);
 
   }catch(error){
     next(error);
@@ -31,6 +31,14 @@ const createTodoMiddleware=async (req:Request, res:Response, next:NextFunction)=
 
 }
 
+const updateTodoMiddleware=async (req:Request, res:Response, next:NextFunction)=>{
+  try{
+    await updateTodo(req,res,next);
+
+  }catch(error){
+    next(error);
+  }
 
 
-export {createUserMiddleware,loginUserMiddleware,createTodoMiddleware};
+}
+export {createTodoMiddleware,loginUserMiddleware,updateTodoMiddleware};

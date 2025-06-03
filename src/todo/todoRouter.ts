@@ -1,10 +1,11 @@
 import express, { NextFunction,Response,Request } from "express"
-import { createTodoMiddleware } from "../middleware/routerMiddleware"
+import { updateTodoMiddleware,createTodoMiddleware } from "../middleware/routerMiddleware"
 import Authenticate from "../middleware/Authenticate"
-import { createTodo } from "./todoController"
+
 
 const todoRouter =express.Router()
 
 
 todoRouter.post('/', Authenticate,  createTodoMiddleware)
+todoRouter.patch('/:todoId',Authenticate, updateTodoMiddleware)
 export default todoRouter

@@ -28,12 +28,12 @@ const updateTodo = async (req:Request, res:Response,next:NextFunction)=>{
     if(!title||!description||!Duedate){
         return res.status(400).json({message:"All fields are required"});
     }
-    const todoID= req.params.todoID;
+    const todoId= req.params.todoID;
 
-    if(!todoID){
+    if(!todoId){
         return res.status(400).json({message:"Todo ID is required"});
     }
-    const todo= await todoModel.findOne({_id:todoID});
+    const todo= await todoModel.findOne({_id:todoId});
     if(!todo){
         return res.status(400).json({message:"Todo does not exist"});
     }
@@ -45,7 +45,7 @@ const updateTodo = async (req:Request, res:Response,next:NextFunction)=>{
 
     const updatedTodo= await todoModel.findOneAndUpdate(
         {
-            _id:todoID
+            _id:todoId
         },
         {
             title,
@@ -59,6 +59,11 @@ const updateTodo = async (req:Request, res:Response,next:NextFunction)=>{
     res.json(updatedTodo);
 
 
+}
+
+
+const listtodos= async (req:Request, res:Response,next:NextFunction)=>{
+ 
 }
 
 
