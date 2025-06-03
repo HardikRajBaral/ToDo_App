@@ -81,7 +81,7 @@ const deleteTodo=async (req:Request, res:Response,next:NextFunction)=>{
             return res.status(400).json({message:"Todo does not exist"});
         }
         const _req= req as AuthernticatedRequest;
-        if(todoId.userName.toString() !== _req.userId){
+        if(todo.userName.toString() !== _req.userId ){
             return res.status(400).json({message:"You are not authorized to delete this todo"});
         }
         await todoModel.deleteOne({_id:todoId});

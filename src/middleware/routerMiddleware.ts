@@ -41,4 +41,4 @@ const updateTodoMiddleware=async (req:Request, res:Response, next:NextFunction)=
 
 
 }
-export {createTodoMiddleware,loginUserMiddleware,updateTodoMiddleware};
+export {createTodoMiddleware,loginUserMiddleware,updateTodoMiddleware,createUserMiddleware};
