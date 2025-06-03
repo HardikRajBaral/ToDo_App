@@ -64,7 +64,8 @@ const updateTodo = async (req:Request, res:Response,next:NextFunction)=>{
 
 const listTodo= async (req:Request, res:Response,next:NextFunction)=>{
     try{
-        const list= await todoModel.find();
+        const _req=req as AuthernticatedRequest 
+        const list= await todoModel.find({userName:_req.userId});
         res.json(list);
     }
     catch(error){
@@ -92,4 +93,4 @@ const deleteTodo=async (req:Request, res:Response,next:NextFunction)=>{
     }
 }
 
-export { createTodo,updateTodo,listTodo}
+export { createTodo,updateTodo,listTodo,deleteTodo};
