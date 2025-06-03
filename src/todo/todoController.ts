@@ -62,9 +62,34 @@ const updateTodo = async (req:Request, res:Response,next:NextFunction)=>{
 }
 
 
-const listtodos= async (req:Request, res:Response,next:NextFunction)=>{
+const listTodo= async (req:Request, res:Response,next:NextFunction)=>{
+    try{
+        const list= await todoModel.find();
+        res.json(list);
+    }
+    catch(error){
+        next(error);
+    }
  
 }
 
+const deleteTodo=async (req:Request, res:Response,next:NextFunction)=>{ 
+    try{
+            const todoId= req.params.todoID;
+        const todo =await todoModel.findOne({_id:todoId});
+        if(!todo){
+            return res.status(400).json({message:"Todo does not exist"});
+        }
+        const _req= req as AuthernticatedRequest;
+        if(todoId.userName.toString() !== _req.userId){
+            return res.status(400).json({message:"You are not authorized to delete this todo"});
+        }
+        await todoModel.deleteOne({_id:todoId});
+        res.json({message:"Todo deleted successfully"});
+    }
+    catch(error){
+        next(error);
+    }
+}
 
-export { createTodo,updateTodo}
+export { createTodo,updateTodo,listTodo}
