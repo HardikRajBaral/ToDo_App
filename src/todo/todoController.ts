@@ -22,4 +22,44 @@ const createTodo= async (req:Request, res:Response,next:NextFunction)=>{
         next(error);
     }
 }
-export { createTodo}
+
+const updateTodo = async (req:Request, res:Response,next:NextFunction)=>{
+    const {title,description,Duedate}=req.body;
+    if(!title||!description||!Duedate){
+        return res.status(400).json({message:"All fields are required"});
+    }
+    const todoID= req.params.todoID;
+
+    if(!todoID){
+        return res.status(400).json({message:"Todo ID is required"});
+    }
+    const todo= await todoModel.findOne({_id:todoID});
+    if(!todo){
+        return res.status(400).json({message:"Todo does not exist"});
+    }
+    
+    const _req= req as AuthernticatedRequest;
+    if (todo.userName.toString() !== _req.userId){
+        return res.status(400).json({message:"You are not authorized to update this todo"});
+    }
+
+    const updatedTodo= await todoModel.findOneAndUpdate(
+        {
+            _id:todoID
+        },
+        {
+            title,
+            description,
+            Duedate
+        },
+        {
+            new:true
+        }
+    )
+    res.json(updatedTodo);
+
+
+}
+
+
+export { createTodo,updateTodo}
