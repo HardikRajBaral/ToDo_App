@@ -28,7 +28,7 @@ const updateTodo = async (req:Request, res:Response,next:NextFunction)=>{
     if(!title||!description||!Duedate){
         return res.status(400).json({message:"All fields are required"});
     }
-    const todoId= req.params.todoID;
+    const todoId= req.params.todoId;
 
     if(!todoId){
         return res.status(400).json({message:"Todo ID is required"});

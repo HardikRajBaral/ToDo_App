@@ -9,5 +9,5 @@ const todoRouter =express.Router()
 
 todoRouter.post('/', Authenticate,  createTodoMiddleware)
 todoRouter.patch('/:todoId',Authenticate, updateTodoMiddleware)
-todoRouter.get('/',listTodo)
+todoRouter.get('/:userId',Authenticate,listTodo)
 export default todoRouter
