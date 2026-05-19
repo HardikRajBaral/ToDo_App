@@ -19,5 +19,5 @@ const todoModel= new mongoose.Schema({
         required:true
     },
     
-})
+},{timestamps:true})
 export default mongoose.model("Todo",todoModel)

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import todoModel from "./todoModel";
 
+const allowedFields =["title","createdAt","Duedate"]
 import { AuthernticatedRequest } from "../middleware/Authenticate";
 const createTodo = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -65,16 +66,21 @@ const listTodo = async (req: Request, res: Response, next: NextFunction) => {
     const _req = req as AuthernticatedRequest;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
+    const sortBy = req.query.sortBy as string || "createdAt";
+    const sortfield= allowedFields.includes(sortBy)? sortBy :"createdAt"
     const skip = (page - 1) * limit;
     const list = await todoModel
       .find({ userName: _req.userId })
       .skip(skip)
-      .limit(limit);
-    const total=await todoModel.countDocuments({ userName: _req.userId });
+      .limit(limit)
+      .sort({ [sortfield]: 1 });
+    const total = await todoModel.countDocuments({ userName: _req.userId });
     res.json({
       list,
       page,
       limit,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
     });
   } catch (error) {
     next(error);
