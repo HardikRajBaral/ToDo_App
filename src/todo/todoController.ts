@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import todoModel from "./todoModel";
 
-const allowedFields =["title","createdAt","Duedate"]
+const allowedFields =["title","createdAt","duedate"]
 import { AuthernticatedRequest } from "../middleware/Authenticate";
 const createTodo = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { title, description, Duedate } = req.body;
+    const { title, description, duedate } = req.body;
     const _req = req as AuthernticatedRequest;
     const newtodo = await todoModel.create({
       userName: _req.userId,
@@ -14,7 +14,7 @@ const createTodo = async (req: Request, res: Response, next: NextFunction) => {
 
       description,
 
-      Duedate,
+      duedate,
     });
 
     return res.status(200).json({ id: newtodo._id });
@@ -24,8 +24,8 @@ const createTodo = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const updateTodo = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, description, Duedate } = req.body;
-  if (!title || !description || !Duedate) {
+  const { title, description, duedate } = req.body;
+  if (!title || !description || !duedate) {
     return res.status(400).json({ message: "All fields are required" });
   }
   const todoId = req.params.todoId;
@@ -52,7 +52,7 @@ const updateTodo = async (req: Request, res: Response, next: NextFunction) => {
     {
       title,
       description,
-      Duedate,
+      duedate,
     },
     {
       new: true,
@@ -69,11 +69,12 @@ const listTodo = async (req: Request, res: Response, next: NextFunction) => {
     const sortBy = req.query.sortBy as string || "createdAt";
     const sortfield= allowedFields.includes(sortBy)? sortBy :"createdAt"
     const skip = (page - 1) * limit;
+    const order= req.query.order ==='asc' ? 1 : -1;
     const list = await todoModel
       .find({ userName: _req.userId })
       .skip(skip)
       .limit(limit)
-      .sort({ [sortfield]: 1 });
+      .sort({ [sortfield]: order });
     const total = await todoModel.countDocuments({ userName: _req.userId });
     res.json({
       list,

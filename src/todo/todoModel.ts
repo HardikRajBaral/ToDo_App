@@ -14,7 +14,7 @@ const todoModel= new mongoose.Schema({
         type:String,
         required:true
     },
-    Duedate:{
+    duedate:{
         type:Date,
         required:true
     },
