@@ -1,8 +1,6 @@
-import { NextFunction ,Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
+import { createTodo, deleteTodo, singleTodo, updateTodo } from "../todo/todoController";
 import { createUser, loginUser } from "../user/userContorller";
-import { create } from "domain";
-import { createTodo, updateTodo,deleteTodo, singleTodo } from "../todo/todoController";
-import { AuthernticatedRequest } from "../middleware/Authenticate";
 
 const createUserMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -56,4 +54,4 @@ const singleTodoMiddleware=async (req:Request, res:Response, next:NextFunction)=
     next(error);
   }
 }
-export {createTodoMiddleware,loginUserMiddleware,updateTodoMiddleware,createUserMiddleware,deleteTodoMiddleware,singleTodoMiddleware};
+export { createTodoMiddleware, createUserMiddleware, deleteTodoMiddleware, loginUserMiddleware, singleTodoMiddleware, updateTodoMiddleware };

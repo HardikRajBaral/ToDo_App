@@ -22,9 +22,12 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "express-rate-limit": "^8.5.2",
     "http-errors": "^2.0.0",
+    "ioredis": "^5.10.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
+    "rate-limit-redis": "^5.0.0",
     "todo-app": "file:"
   }
 }

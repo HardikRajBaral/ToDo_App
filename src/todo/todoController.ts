@@ -2,13 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import todoModel from "./todoModel";
 
 const allowedFields =["title","createdAt","duedate"]
-import { AuthernticatedRequest } from "../middleware/Authenticate";
 const createTodo = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title, description, duedate } = req.body;
-    const _req = req as AuthernticatedRequest;
+   
     const newtodo = await todoModel.create({
-      userName: _req.userId,
+      userName: req.userId,
 
       title,
 
@@ -38,8 +37,7 @@ const updateTodo = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(400).json({ message: "Todo does not exist" });
   }
 
-  const _req = req as AuthernticatedRequest;
-  if (todo.userName.toString() !== _req.userId) {
+  if (todo.userName.toString() !== req.userId) {
     return res
       .status(400)
       .json({ message: "You are not authorized to update this todo" });
@@ -63,7 +61,6 @@ const updateTodo = async (req: Request, res: Response, next: NextFunction) => {
 
 const listTodo = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const _req = req as AuthernticatedRequest;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const sortBy = req.query.sortBy as string || "createdAt";
@@ -71,11 +68,11 @@ const listTodo = async (req: Request, res: Response, next: NextFunction) => {
     const skip = (page - 1) * limit;
     const order= req.query.order ==='asc' ? 1 : -1;
     const list = await todoModel
-      .find({ userName: _req.userId })
+      .find({ userName: req.userId })
       .skip(skip)
       .limit(limit)
       .sort({ [sortfield]: order });
-    const total = await todoModel.countDocuments({ userName: _req.userId });
+    const total = await todoModel.countDocuments({ userName: req.userId });
     res.json({
       list,
       page,
@@ -91,8 +88,7 @@ const listTodo = async (req: Request, res: Response, next: NextFunction) => {
 const singleTodo = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.todoId;
-    const _req = req as AuthernticatedRequest;
-    const todo = await todoModel.findOne({ userName: _req.userId, _id: id });
+    const todo = await todoModel.findOne({ userName: req.userId, _id: id });
     res.json(todo);
   } catch (error) {
     next(error);
@@ -101,13 +97,13 @@ const singleTodo = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteTodo = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const todoId = req.params.todoID;
+    const todoId = req.params.todoId;
     const todo = await todoModel.findOne({ _id: todoId });
     if (!todo) {
       return res.status(400).json({ message: "Todo does not exist" });
     }
-    const _req = req as AuthernticatedRequest;
-    if (todo.userName.toString() !== _req.userId) {
+    
+    if (todo.userName.toString() !== req.userId) {
       return res
         .status(400)
         .json({ message: "You are not authorized to delete this todo" });
