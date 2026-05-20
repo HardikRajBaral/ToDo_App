@@ -15,6 +15,7 @@ const Authenticate= (req:Request, res:Response, next:NextFunction):void=>{
         
         const parrsedToken= token.split(" ")[1];
         const decodedToken= jwt.verify(parrsedToken,config.jwtSecret as string);
+        
         const _req = req as AuthernticatedRequest
         _req.userId=decodedToken.sub as string;
         next();
